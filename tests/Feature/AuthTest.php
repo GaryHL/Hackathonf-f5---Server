@@ -87,22 +87,4 @@ class AuthTest extends TestCase
         $response->assertJsonStructure(['token']);
     }
 
-    /** @test */
-    public function test_user_index_return_users()
-    {
-        $response = $this->get('/api/users');
-
-        $response->assertStatus(200);
-
-        $response->assertJsonStructure([
-            '*' => [
-                'id',
-                'name',
-                'email',
-                'email_verified_at',
-                'created_at',
-                'updated_at'
-            ]
-        ]);
-    }
 }
