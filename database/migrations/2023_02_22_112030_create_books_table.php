@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->binary('image');
+            $table->string('image');
             $table->string('category');
             $table->float('price');
             $table->timestamps();

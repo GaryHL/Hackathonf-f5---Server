@@ -22,17 +22,33 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+        // Validación de entrada
+        $request->validate([
+            'title' => 'required',
+            'image' => 'required|image',
+            'category' => 'required',
+            'price' => 'required'
+        ]);
+    
+        // Subida y almacenamiento de la imagen
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $imagePath = 'images/books/';
+        $image->move(public_path($imagePath), $imageName);
+    
+        // Creación y almacenamiento del libro
         $book = new Book();
         $book->title = $request->title;
         $book->description = $request->description;
-        $book->user_id = auth()->id(); // Asocia el ID del usuario autenticado con el libro
-        $book->image = $request->image;
+        $book->user_id = auth()->id();
+        $book->image = $imagePath . $imageName;
         $book->category = $request->category;
-        $book->price= $request->price;
+        $book->price = $request->price;
         $book->save();
-
+    
         return response()->json($book, 201);
     }
+    
 
     /**
      * Display the specified resource.
