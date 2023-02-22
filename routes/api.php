@@ -25,6 +25,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::apiResource('users', UserController::class);
+
 //Autenticate routes
 Route::middleware('jwt.verify')->group(function () {
 });

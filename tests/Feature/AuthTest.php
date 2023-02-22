@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
 
-
-class TestUser extends TestCase
+class AuthTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -55,7 +54,7 @@ class TestUser extends TestCase
             'email' => 'example@email.com',
         ]);
     }
-
+    /** @test */
     public function test_login_return_access_token()
     {
         $dataUser = [
@@ -66,11 +65,11 @@ class TestUser extends TestCase
         ];
 
         $response = $this->post('/api/register', $dataUser);
-        
+
         $response->assertStatus(201);
-        
+
         $response->assertJsonStructure(['token']);
-        
+
         $this->assertDatabaseHas('users', [
             'name' => 'nameexample',
             'email' => 'example@email.com',
@@ -80,13 +79,30 @@ class TestUser extends TestCase
             'email' => 'example@email.com',
             'password' => 'examplepassword',
         ];
-        
+
         $response = $this->post('/api/login', $dataUserLogin);
-        
+
         $response->assertStatus(200);
 
         $response->assertJsonStructure(['token']);
     }
 
+    /** @test */
+    public function test_user_index_return_users()
+    {
+        $response = $this->get('/api/users');
 
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            '*' => [
+                'id',
+                'name',
+                'email',
+                'email_verified_at',
+                'created_at',
+                'updated_at'
+            ]
+        ]);
+    }
 }
