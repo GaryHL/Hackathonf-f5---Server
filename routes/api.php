@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,5 @@ Route::apiResource('users', UserController::class);
 
 //Autenticate routes
 Route::middleware('jwt.verify')->group(function () {
+    Route::apiResource('books', BookController::class);
 });

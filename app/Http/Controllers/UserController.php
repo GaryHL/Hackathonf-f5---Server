@@ -12,7 +12,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::all();
+        $user = User::with(['books'])->get();
         return response()->json($user);
     }
 
@@ -27,9 +27,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return response()->json($user);
+        $user = User::findOrFail($id);
+        $books = $user->books;
+
+        return response()->json($books, 200);
     }
 
     /**
