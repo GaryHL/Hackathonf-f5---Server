@@ -19,5 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Public routes
 Route::post('register', [AuthController::class,'register']);
 Route::post('login', [AuthController::class,'login']);
+
+//Autenticate routes
+Route::middleware('jwt.verify') -> group(function(){
+    Route::get('users',[UserController::class,'index']);
+});
