@@ -12,7 +12,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::with('user')->get();
+
+        return response()->json($books, 200);
     }
 
     /**
