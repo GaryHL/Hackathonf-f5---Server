@@ -27,16 +27,22 @@ class BookController extends Controller
         $book->description = $request->description;
         $book->user_id = auth()->id(); // Asocia el ID del usuario autenticado con el libro
         $book->save();
-    
+
         return response()->json($book, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Book $book)
+    public function show($id)
     {
-        //
+        $book = Book::with('user')->find($id);
+
+        if (!$book) {
+            return response()->json(['message' => 'El libro no existe'], 404);
+        }
+
+        return response()->json($book, 200);
     }
 
     /**
@@ -50,8 +56,16 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
+    public function destroy($id)
     {
-        //
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json(['message' => 'El libro no existe'], 404);
+        }
+
+        $book->delete();
+
+        return response()->json(['message' => 'El libro se ha eliminado correctamente'], 200);
     }
 }
