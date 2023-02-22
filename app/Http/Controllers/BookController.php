@@ -26,6 +26,7 @@ class BookController extends Controller
         $book->title = $request->title;
         $book->description = $request->description;
         $book->user_id = auth()->id(); // Asocia el ID del usuario autenticado con el libro
+        $book->image = $request->image;
         $book->save();
 
         return response()->json($book, 201);
