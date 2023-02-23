@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -70,6 +71,22 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         //
+    }
+
+    /**
+     * Search for the specified resource in storage.
+     */
+    public function search(Request $request, string $text)
+    {
+        $books = DB::table('books')
+        ->select(DB::raw('*'))
+        ->where('title', 'like', '%'.$text.'%')
+        ->orwhere('category', 'like', '%'.$text.'%')
+        ->get();;
+
+    
+
+        return response()->json($books, 200);
     }
 
     /**
