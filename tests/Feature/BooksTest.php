@@ -6,6 +6,8 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class BooksTest extends TestCase
 {
@@ -23,8 +25,8 @@ class BooksTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->withoutExceptionHandling();
         Artisan::call('migrate --seed');
-
         $user = [
             'name' => 'user_example',
             'email' => 'user@gmail.com',
@@ -44,16 +46,56 @@ class BooksTest extends TestCase
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
+    /**
+     * @test
+     */
+    public function test_create_book_return_book()
+    {
 
-    public function test_create_book_return_book() {
+
+        // Preparación de datos de prueba
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('bookss.jpg');
+
+        // Envío de la solicitud
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->post('/api/books', [
+        ])->postJson('/api/books', [
             'title' => 'Test Title',
-            'description' => 'description example',
-        ]);
+            'description' => 'Test description',
+            'image' => $file,
+            'category' => 'category',
+            'price' => 005,
+        ]); 
 
+        // Verificación de la respuesta
         $response->assertStatus(201);
 
+    }
+
+    public function test_show_book_return_show()
+    {
+        // $response = $this->withHeaders([
+        //     'Authorization' => 'Bearer ' . $this->token,
+        // ])->get('/api/books/1');
+        // $response->assertJsonStructure([
+        //     'id',
+        //     'title',
+        //     'description',
+        //     'user_id',
+        //     'image',
+        //     'category',
+        //     'price',
+        //     'created_at',
+        //     'updated_at',
+        //     'user' => [
+        //         'id',
+        //         'name',
+        //         'email',
+        //         'email_verified_at',
+        //         'created_at',
+        //         'updated_at',
+        //     ],
+        // ]);
     }
 }
