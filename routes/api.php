@@ -21,11 +21,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 //Public routes
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('books-public/{book}', [BookController::class, 'show']);
 Route::get('books-public', [BookController::class, 'index']);
+Route::get('search/{text}', [BookController::class, 'search']);
 
 Route::apiResource('users', UserController::class);
 
