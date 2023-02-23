@@ -82,10 +82,7 @@ class BookController extends Controller
         ->select(DB::raw('*'))
         ->where('title', 'like', '%'.$text.'%')
         ->orwhere('category', 'like', '%'.$text.'%')
-        ->get();;
-
-    
-
+        ->get();
         return response()->json($books, 200);
     }
 
